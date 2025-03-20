@@ -14,15 +14,7 @@ import {
   insertConversationSchema,
   insertUserBadgeSchema
 } from "@shared/schema";
-import OpenAI from "openai";
-
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-// the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-const OPENAI_MODEL = "gpt-4o";
+import { chatCompletion, chatCompletionJSON, hasAIServices, getActiveAIService } from "./ai";
 
 // Helper to get file paths for uploads
 const __filename = fileURLToPath(import.meta.url);
@@ -397,17 +389,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             { role: "user", content: message }
           ];
       
-      // Call OpenAI API
-      const response = await openai.chat.completions.create({
-        model: OPENAI_MODEL,
-        messages: messages.map(m => ({
-          role: m.role === "system" ? "assistant" : (m.role as "user" | "assistant"),
-          content: m.content
-        })),
-      });
-      
-      // Get the assistant's response
-      const aiResponse = response.choices[0].message.content;
+      // Call AI service (OpenAI with Gemini fallback)
+      const aiResponse = await chatCompletion(messages);
       
       // Update or create conversation
       const updatedMessages = [...messages, { role: "system", content: aiResponse }];

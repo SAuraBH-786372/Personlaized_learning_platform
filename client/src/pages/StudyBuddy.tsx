@@ -104,20 +104,20 @@ export default function StudyBuddy() {
                     Flashcards
                   </TabsTrigger>
                 </TabsList>
+                <CardContent className="p-0">
+                  <TabsContent value="chat" className="m-0">
+                    <ChatInterface userId={mockUser.id} />
+                  </TabsContent>
+                  <TabsContent value="flashcards" className="m-0">
+                    <FlashcardGenerator 
+                      userId={mockUser.id} 
+                      initialTopic={topic} 
+                      materialId={materialId}
+                    />
+                  </TabsContent>
+                </CardContent>
               </Tabs>
             </CardHeader>
-            <CardContent className="p-0">
-              <TabsContent value="chat" className="m-0">
-                <ChatInterface userId={mockUser.id} />
-              </TabsContent>
-              <TabsContent value="flashcards" className="m-0">
-                <FlashcardGenerator 
-                  userId={mockUser.id} 
-                  initialTopic={topic} 
-                  materialId={materialId}
-                />
-              </TabsContent>
-            </CardContent>
           </Card>
         </div>
       </main>
