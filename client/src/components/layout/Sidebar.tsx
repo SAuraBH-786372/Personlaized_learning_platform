@@ -37,6 +37,11 @@ export default function Sidebar({ user, recentMaterials, userBadges }: SidebarPr
         </button>
       </div>
       
+      {/* AI Service Indicator */}
+      <div className="px-6 py-2 border-b border-neutral-200">
+        <AIServiceIndicator />
+      </div>
+      
       {/* Navigation */}
       <nav className="p-4 space-y-6">
         {/* Main nav */}
