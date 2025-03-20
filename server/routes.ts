@@ -365,6 +365,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI endpoints
+  // Get AI service status
+  app.get("/api/ai/status", (_req: Request, res: Response) => {
+    const hasAI = hasAIServices();
+    const activeService = getActiveAIService();
+    
+    return res.status(200).json({
+      available: hasAI,
+      service: activeService
+    });
+  });
+
   app.post("/api/ai/chat", async (req: Request, res: Response) => {
     try {
       const { userId, message, conversationId } = req.body;
@@ -425,19 +436,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "User ID, material ID, and content are required" });
       }
       
-      // Call OpenAI API for summarization
-      const response = await openai.chat.completions.create({
-        model: OPENAI_MODEL,
-        messages: [
-          { 
-            role: "assistant", 
-            content: "You are an AI academic assistant. Summarize the following text to create a comprehensive study note that captures the key points and important details. Format with appropriate headings, bullet points, and emphasis."
-          },
-          { role: "user", content: content }
-        ],
-      });
+      // Call AI service for summarization
+      const messages = [
+        { 
+          role: "assistant", 
+          content: "You are an AI academic assistant. Summarize the following text to create a comprehensive study note that captures the key points and important details. Format with appropriate headings, bullet points, and emphasis."
+        },
+        { role: "user", content: content }
+      ];
       
-      const summary = response.choices[0].message.content;
+      const summary = await chatCompletion(messages);
       
       // Save the summary
       const newSummary = await storage.createMaterialSummary({
@@ -461,21 +469,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "User ID and topic are required" });
       }
       
-      // Call OpenAI API to generate flashcards
-      const response = await openai.chat.completions.create({
-        model: OPENAI_MODEL,
-        messages: [
-          { 
-            role: "user", 
-            content: `Generate ${count} flashcards for studying the topic: ${topic}. Format the response as a JSON array of objects, each with 'question' and 'answer' fields.`
-          }
-        ],
-        response_format: { type: "json_object" },
-      });
+      // Call AI service to generate flashcards
+      const messages = [
+        { 
+          role: "user", 
+          content: `Generate ${count} flashcards for studying the topic: ${topic}. Format the response as a JSON object with a 'flashcards' array of objects, each with 'question' and 'answer' fields.`
+        }
+      ];
       
       try {
-        const content = response.choices[0].message.content || "";
-        const flashcardsData = JSON.parse(content);
+        const flashcardsData = await chatCompletionJSON<{flashcards: Array<{question: string, answer: string}>}>(messages);
         
         // Validate and save flashcards
         if (Array.isArray(flashcardsData.flashcards)) {
@@ -500,15 +503,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       } catch (parseError) {
         console.error("Failed to parse flashcards:", parseError);
         // Fallback handling if JSON parsing fails
-        const content = response.choices[0].message.content || "";
         const flashcards = [];
         
-        // Create at least one flashcard from the content
+        // Generate a basic summary as fallback
+        const summary = await chatCompletion([
+          { role: "user", content: `Provide a concise summary of key concepts about: ${topic}` }
+        ]);
+        
+        // Create at least one flashcard from the summary
         const fallbackFlashcard = await storage.createFlashcard({
           userId: parseInt(userId),
           materialId: materialId ? parseInt(materialId) : undefined,
           question: `Key concepts about ${topic}?`,
-          answer: content
+          answer: summary || `Information about ${topic}`
         });
         
         flashcards.push(fallbackFlashcard);
@@ -531,24 +538,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Call OpenAI API to generate study plan
-      const response = await openai.chat.completions.create({
-        model: OPENAI_MODEL,
-        messages: [
-          { 
-            role: "user", 
-            content: `Generate a detailed ${durationDays}-day study plan for the following topics: ${topics.join(", ")}. 
-            The student can study ${hoursPerDay} hours per day. 
-            Format the response as a JSON array of study sessions, each with fields 'title', 'subject', 'startTime', 'endTime'. 
-            Use ISO date strings for times, starting from tomorrow. Distribute the sessions appropriately across the specified duration.`
-          }
-        ],
-        response_format: { type: "json_object" },
-      });
+      // Call AI service to generate study plan
+      const messages = [
+        { 
+          role: "user", 
+          content: `Generate a detailed ${durationDays}-day study plan for the following topics: ${topics.join(", ")}. 
+          The student can study ${hoursPerDay} hours per day. 
+          Format the response as a JSON object with a 'sessions' array, each session having fields 'title', 'subject', 'startTime', 'endTime'. 
+          Use ISO date strings for times, starting from tomorrow. Distribute the sessions appropriately across the specified duration.`
+        }
+      ];
       
       try {
-        const content = response.choices[0].message.content || "";
-        const planData = JSON.parse(content);
+        const planData = await chatCompletionJSON<{sessions: Array<{title: string, subject: string, startTime: string, endTime: string}>}>(messages);
         
         // Process and save study sessions
         if (Array.isArray(planData.sessions)) {

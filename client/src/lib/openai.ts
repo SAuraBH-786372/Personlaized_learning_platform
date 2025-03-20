@@ -1,5 +1,11 @@
 import { apiRequest } from "./queryClient";
 
+// Get current AI service status
+export async function getAIStatus() {
+  const response = await apiRequest("GET", "/api/ai/status");
+  return await response.json();
+}
+
 // Chat with the AI assistant
 export async function chatWithAI(userId: number, message: string, conversationId?: number) {
   const response = await apiRequest("POST", "/api/ai/chat", {
