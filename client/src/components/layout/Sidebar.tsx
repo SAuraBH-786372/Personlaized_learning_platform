@@ -1,4 +1,5 @@
 import { Link, useLocation } from "wouter";
+import { AIServiceIndicator } from "@/components/shared/AIServiceIndicator";
 
 type SidebarProps = {
   user?: {
