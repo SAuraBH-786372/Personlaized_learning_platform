@@ -69,10 +69,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsAuthenticated(true);
       localStorage.setItem("user", JSON.stringify(data.user));
       
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Invalid username or password";
+        
       toast({
         title: "Login Failed",
-        description: error.message || "Invalid username or password",
+        description: errorMessage,
         variant: "destructive"
       });
       throw error;
@@ -106,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       logout();
       return false;
     }

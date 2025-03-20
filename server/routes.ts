@@ -61,7 +61,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.createUser(userData);
       const { password, ...userWithoutPassword } = user;
       
-      return res.status(201).json(userWithoutPassword);
+      return res.status(201).json({ user: userWithoutPassword });
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }
@@ -77,7 +77,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const { password: _, ...userWithoutPassword } = user;
-      return res.status(200).json(userWithoutPassword);
+      return res.status(200).json({ user: userWithoutPassword });
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }
