@@ -46,35 +46,40 @@ export default function Sidebar({ user, recentMaterials, userBadges }: SidebarPr
       <nav className="p-4 space-y-6">
         {/* Main nav */}
         <div className="space-y-2">
-          <Link href="/">
-            <a className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}>
-              <span className="material-icons">dashboard</span>
-              <span>Dashboard</span>
-            </a>
+          <Link 
+            href="/" 
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}
+          >
+            <span className="material-icons">dashboard</span>
+            <span>Dashboard</span>
           </Link>
-          <Link href="/study-planner">
-            <a className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/study-planner" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}>
-              <span className="material-icons">event_note</span>
-              <span>AI Study Planner</span>
-            </a>
+          <Link 
+            href="/study-planner"
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/study-planner" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}
+          >
+            <span className="material-icons">event_note</span>
+            <span>AI Study Planner</span>
           </Link>
-          <Link href="/textbook-analyzer">
-            <a className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/textbook-analyzer" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}>
-              <span className="material-icons">description</span>
-              <span>Textbook Analyzer</span>
-            </a>
+          <Link 
+            href="/textbook-analyzer"
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/textbook-analyzer" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}
+          >
+            <span className="material-icons">description</span>
+            <span>Textbook Analyzer</span>
           </Link>
-          <Link href="/study-buddy">
-            <a className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/study-buddy" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}>
-              <span className="material-icons">chat</span>
-              <span>AI Study Buddy</span>
-            </a>
+          <Link 
+            href="/study-buddy"
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/study-buddy" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}
+          >
+            <span className="material-icons">chat</span>
+            <span>AI Study Buddy</span>
           </Link>
-          <Link href="/progress-tracker">
-            <a className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/progress-tracker" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}>
-              <span className="material-icons">insights</span>
-              <span>Progress Tracker</span>
-            </a>
+          <Link 
+            href="/progress-tracker"
+            className={`flex items-center space-x-3 px-3 py-2 rounded-lg ${location === "/progress-tracker" ? "bg-primary/10 text-primary font-medium" : "text-neutral-700 hover:bg-neutral-100"} transition`}
+          >
+            <span className="material-icons">insights</span>
+            <span>Progress Tracker</span>
           </Link>
         </div>
         
@@ -85,11 +90,12 @@ export default function Sidebar({ user, recentMaterials, userBadges }: SidebarPr
             <ul className="space-y-1">
               {recentMaterials.map((material) => (
                 <li key={material.id}>
-                  <Link href={`/textbook-analyzer?id=${material.id}`}>
-                    <a className="flex items-center space-x-3 px-3 py-2 rounded-lg text-neutral-700 hover:bg-neutral-100 transition text-sm">
-                      <span className="material-icons text-neutral-400 text-sm">description</span>
-                      <span className="truncate">{material.title}</span>
-                    </a>
+                  <Link 
+                    href={`/textbook-analyzer?id=${material.id}`}
+                    className="flex items-center space-x-3 px-3 py-2 rounded-lg text-neutral-700 hover:bg-neutral-100 transition text-sm"
+                  >
+                    <span className="material-icons text-neutral-400 text-sm">description</span>
+                    <span className="truncate">{material.title}</span>
                   </Link>
                 </li>
               ))}

@@ -198,113 +198,115 @@ export default function ProgressTracker() {
           
           <Card>
             <CardHeader className="px-6 py-4 border-b border-neutral-200">
+              <CardTitle className="font-display font-semibold text-lg">Subject Progress</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
               <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
-                <TabsList>
+                <TabsList className="mb-6">
                   <TabsTrigger value="overview">Subject Overview</TabsTrigger>
                   <TabsTrigger value="details">Topic Details</TabsTrigger>
                 </TabsList>
-              </Tabs>
-            </CardHeader>
-            <CardContent className="p-6">
-              <TabsContent value="overview" className="m-0 p-0">
-                <div className="space-y-6">
-                  {subjectsData.map((subject, index) => (
-                    <div key={index}>
-                      <div className="flex justify-between items-center mb-2">
-                        <h3 className="font-medium">{subject.name}</h3>
-                        <span className="text-sm text-neutral-500">{subject.progress}% mastery</span>
-                      </div>
-                      <Progress value={subject.progress} className="h-2 mb-4" />
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {subject.topics.map((topic, topicIndex) => (
-                          <div key={topicIndex} className="bg-neutral-50 p-3 rounded-lg">
-                            <div className="flex justify-between items-center mb-2">
-                              <p className="text-sm font-medium">{topic.name}</p>
-                              <span className="text-xs">{topic.mastery}%</span>
+                
+                <TabsContent value="overview" className="m-0 p-0">
+                  <div className="space-y-6">
+                    {subjectsData.map((subject, index) => (
+                      <div key={index}>
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="font-medium">{subject.name}</h3>
+                          <span className="text-sm text-neutral-500">{subject.progress}% mastery</span>
+                        </div>
+                        <Progress value={subject.progress} className="h-2 mb-4" />
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {subject.topics.map((topic, topicIndex) => (
+                            <div key={topicIndex} className="bg-neutral-50 p-3 rounded-lg">
+                              <div className="flex justify-between items-center mb-2">
+                                <p className="text-sm font-medium">{topic.name}</p>
+                                <span className="text-xs">{topic.mastery}%</span>
+                              </div>
+                              <Progress value={topic.mastery} className="h-1" />
                             </div>
-                            <Progress value={topic.mastery} className="h-1" />
-                          </div>
-                        ))}
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="details" className="m-0 p-0">
+                  <div className="space-y-6">
+                    <div className="bg-warning/10 border border-warning/20 rounded-lg p-4 mb-6">
+                      <div className="flex">
+                        <span className="material-icons text-warning mr-2">tips_and_updates</span>
+                        <div>
+                          <p className="font-medium">Suggested Focus Areas</p>
+                          <p className="text-sm text-neutral-600 mt-1">
+                            Based on your progress, we recommend focusing on these topics:
+                          </p>
+                          <ul className="list-disc pl-5 mt-2 text-sm space-y-1">
+                            <li>Organic Chemistry: Reaction Mechanisms (35% mastery)</li>
+                            <li>Computer Science: Object-Oriented Programming (55% mastery)</li>
+                            <li>Social Psychology: Group Dynamics (60% mastery)</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="details" className="m-0 p-0">
-                <div className="space-y-6">
-                  <div className="bg-warning/10 border border-warning/20 rounded-lg p-4 mb-6">
-                    <div className="flex">
-                      <span className="material-icons text-warning mr-2">tips_and_updates</span>
-                      <div>
-                        <p className="font-medium">Suggested Focus Areas</p>
-                        <p className="text-sm text-neutral-600 mt-1">
-                          Based on your progress, we recommend focusing on these topics:
-                        </p>
-                        <ul className="list-disc pl-5 mt-2 text-sm space-y-1">
-                          <li>Organic Chemistry: Reaction Mechanisms (35% mastery)</li>
-                          <li>Computer Science: Object-Oriented Programming (55% mastery)</li>
-                          <li>Social Psychology: Group Dynamics (60% mastery)</li>
-                        </ul>
+                    
+                    <div>
+                      <h3 className="font-medium text-lg mb-4">Learning Achievements</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+                          <div className="flex items-center mb-2">
+                            <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center mr-2">
+                              <span className="material-icons text-accent">schedule</span>
+                            </div>
+                            <p className="font-medium">Most Consistent Subject</p>
+                          </div>
+                          <p className="text-sm text-neutral-600">
+                            You've studied <span className="font-medium">Psychology</span> most consistently, with an average of 4 sessions per week.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+                          <div className="flex items-center mb-2">
+                            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center mr-2">
+                              <span className="material-icons text-primary">trending_up</span>
+                            </div>
+                            <p className="font-medium">Most Improved Topic</p>
+                          </div>
+                          <p className="text-sm text-neutral-600">
+                            <span className="font-medium">Data Structures</span> has shown the most improvement, with a 25% increase in mastery this month.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+                          <div className="flex items-center mb-2">
+                            <div className="h-8 w-8 rounded-full bg-secondary/20 flex items-center justify-center mr-2">
+                              <span className="material-icons text-secondary">emoji_events</span>
+                            </div>
+                            <p className="font-medium">Longest Study Streak</p>
+                          </div>
+                          <p className="text-sm text-neutral-600">
+                            You maintained a 12-day study streak from June 3rd to June 14th.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+                          <div className="flex items-center mb-2">
+                            <div className="h-8 w-8 rounded-full bg-warning/20 flex items-center justify-center mr-2">
+                              <span className="material-icons text-warning">lightbulb</span>
+                            </div>
+                            <p className="font-medium">Learning Style Insight</p>
+                          </div>
+                          <p className="text-sm text-neutral-600">
+                            You learn best through visual materials and interactive quizzes based on your engagement patterns.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  
-                  <div>
-                    <h3 className="font-medium text-lg mb-4">Learning Achievements</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
-                        <div className="flex items-center mb-2">
-                          <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center mr-2">
-                            <span className="material-icons text-accent">schedule</span>
-                          </div>
-                          <p className="font-medium">Most Consistent Subject</p>
-                        </div>
-                        <p className="text-sm text-neutral-600">
-                          You've studied <span className="font-medium">Psychology</span> most consistently, with an average of 4 sessions per week.
-                        </p>
-                      </div>
-                      
-                      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
-                        <div className="flex items-center mb-2">
-                          <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center mr-2">
-                            <span className="material-icons text-primary">trending_up</span>
-                          </div>
-                          <p className="font-medium">Most Improved Topic</p>
-                        </div>
-                        <p className="text-sm text-neutral-600">
-                          <span className="font-medium">Data Structures</span> has shown the most improvement, with a 25% increase in mastery this month.
-                        </p>
-                      </div>
-                      
-                      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
-                        <div className="flex items-center mb-2">
-                          <div className="h-8 w-8 rounded-full bg-secondary/20 flex items-center justify-center mr-2">
-                            <span className="material-icons text-secondary">emoji_events</span>
-                          </div>
-                          <p className="font-medium">Longest Study Streak</p>
-                        </div>
-                        <p className="text-sm text-neutral-600">
-                          You maintained a 12-day study streak from June 3rd to June 14th.
-                        </p>
-                      </div>
-                      
-                      <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
-                        <div className="flex items-center mb-2">
-                          <div className="h-8 w-8 rounded-full bg-warning/20 flex items-center justify-center mr-2">
-                            <span className="material-icons text-warning">lightbulb</span>
-                          </div>
-                          <p className="font-medium">Learning Style Insight</p>
-                        </div>
-                        <p className="text-sm text-neutral-600">
-                          You learn best through visual materials and interactive quizzes based on your engagement patterns.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </TabsContent>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </div>
